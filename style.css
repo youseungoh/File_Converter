@@ -65,6 +65,11 @@ html, body {
   transition: opacity 0.28s ease, transform 0.28s ease;
 }
 
+#screen-home {
+  min-height: unset;
+  height: auto;
+}
+
 .screen.active {
   display: flex;
   opacity: 1;
@@ -180,9 +185,9 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 24px clamp(16px, 5vw, 48px) 32px;
-  gap: 24px;
+  justify-content: flex-start;
+  padding: 20px clamp(16px, 5vw, 48px) 24px;
+  gap: 20px;
   max-width: var(--content-max);
   width: 100%;
   box-sizing: border-box;
@@ -1168,12 +1173,15 @@ html, body {
   .logo-sub { display: none; } /* 작은 화면에선 부제목 숨김 */
 
   /* Home */
-  .home-main { gap: 24px; }
+  .home-main { gap: 14px; padding-top: 12px; padding-bottom: 16px; }
 
-  .dropzone-inner { padding: 36px 24px; gap: 10px; }
-  .drop-icon-wrap { width: 56px; height: 56px; }
-  .drop-icon { width: 26px; height: 26px; }
+  .dropzone-inner { padding: 28px 20px; gap: 10px; }
+  .drop-icon-wrap { width: 48px; height: 48px; margin-bottom: 2px; }
+  .drop-icon { width: 22px; height: 22px; }
   .drop-title { font-size: 15px; }
+
+  .footer { padding: 10px 16px; }
+  .footer-line { font-size: 11px; }
 
   .tabs { width: 100%; justify-content: stretch; }
   .tab { flex: 1; justify-content: center; padding: 9px 12px; font-size: 13px; }
@@ -1238,7 +1246,7 @@ html, body {
    ================================================================ */
 .footer {
   text-align: center;
-  padding: 20px 24px;
+  padding: 14px 24px;
   border-top: 1px solid var(--border);
   line-height: 1.45;
 }
