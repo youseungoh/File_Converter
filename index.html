@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FileConvert(벡터로) – 이미지 · 벡터 변환기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/utif2@3.1.0/UTIF.js"></script>
+</head>
+<body>
+
+  <!-- ======================== SCREEN 1: HOME ======================== -->
+  <div id="screen-home" class="screen active">
+    <main class="home-main">
+
+      <!-- 본문 상단 로고 -->
+      <div class="page-top page-top-home">
+        <div class="logo">
+          <div class="logo-icon">
+            <i data-lucide="pentagon" class="icon-logo"></i>
+          </div>
+          <span class="logo-text">FileConvert<span class="logo-sub">(벡터로)</span></span>
+        </div>
+      </div>
+
+      <div class="hero-text">
+        <h1 class="hero-title">무엇이든 변환하세요</h1>
+        <p class="hero-sub">이미지 · 벡터 모든 포맷 지원</p>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-inner">
+          <div class="drop-icon-wrap">
+            <i data-lucide="upload-cloud" class="drop-icon"></i>
+          </div>
+          <p class="drop-title">파일을 여기에 드래그하거나</p>
+          <label class="btn-upload" for="file-input">
+            <i data-lucide="folder-open" style="width:16px;height:16px;margin-right:6px;"></i>
+            파일 선택
+          </label>
+          <input type="file" id="file-input" accept="image/*,.ai,.eps,.pdf,.svg" hidden />
+          <p class="drop-hint">PNG, JPG, GIF, BMP, TIFF, TGA, SVG, AI 지원</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ======================== SCREEN 2: OPTIONS ======================== -->
+  <div id="screen-options" class="screen">
+    <main class="options-main">
+
+      <!-- 페이지 상단 타이틀 + 뒤로가기 -->
+      <div class="page-top">
+        <div class="logo">
+          <div class="logo-icon">
+            <i data-lucide="pentagon" class="icon-logo"></i>
+          </div>
+          <span class="logo-text">FileConvert<span class="logo-sub">(벡터로)</span></span>
+        </div>
+        <button class="btn-ghost" id="btn-back">
+          <i data-lucide="house" style="width:15px;height:15px;margin-right:5px;"></i>
+          홈화면으로
+        </button>
+      </div>
+
+      <!-- File Card -->
+      <div class="file-card" id="file-card">
+        <div class="file-info">
+          <div class="file-icon-wrap">
+            <i data-lucide="file-image" class="file-icon"></i>
+          </div>
+          <div class="file-meta">
+            <span class="file-name" id="opt-filename">파일명.png</span>
+            <span class="file-size" id="opt-filesize">0 KB</span>
+          </div>
+        </div>
+        <button class="btn-remove" id="btn-remove-file" title="파일 제거">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <!-- 포맷 선택 (통합) -->
+      <div id="image-options" class="options-section">
+        <div class="section-header-row">
+          <h2 class="section-title">변환 포맷 선택</h2>
+          <span class="est-size-badge" id="img-est-size"></span>
+        </div>
+
+        <!-- 해상도 선택 -->
+        <div class="resolution-row">
+          <span class="res-label">해상도</span>
+          <div class="res-btns">
+            <button class="res-btn active" data-res="high">
+              <i data-lucide="zoom-in" style="width:13px;height:13px;margin-right:4px;"></i>
+              고해상도
+            </button>
+            <button class="res-btn" data-res="low">
+              <i data-lucide="zoom-out" style="width:13px;height:13px;margin-right:4px;"></i>
+              저해상도
+            </button>
+          </div>
+        </div>
+
+        <div class="format-grid">
+          <button class="format-btn" data-format="jpg">
+            <span class="format-label">JPG</span>
+            <span class="format-desc">손실 압축</span>
+          </button>
+          <button class="format-btn" data-format="png">
+            <span class="format-label">PNG</span>
+            <span class="format-desc">투명도 지원</span>
+          </button>
+          <button class="format-btn" data-format="gif">
+            <span class="format-label">GIF</span>
+            <span class="format-desc">애니메이션</span>
+          </button>
+          <button class="format-btn" data-format="bmp">
+            <span class="format-label">BMP</span>
+            <span class="format-desc">비압축</span>
+          </button>
+          <button class="format-btn" data-format="tiff">
+            <span class="format-label">TIFF</span>
+            <span class="format-desc">고품질</span>
+          </button>
+          <button class="format-btn" data-format="tga">
+            <span class="format-label">TGA</span>
+            <span class="format-desc">게임용</span>
+          </button>
+          <button class="format-btn" data-format="svg">
+            <span class="format-label">SVG</span>
+            <span class="format-desc">벡터</span>
+          </button>
+          <button class="format-btn format-btn-ai" data-format="ai">
+            <span class="format-label">AI</span>
+            <span class="format-desc">SVG · 일러스트레이터용</span>
+          </button>
+        </div>
+
+        <!-- AI / SVG 선택 시 표시되는 벡터 슬라이더 -->
+        <div id="vector-options-inline" class="vector-options-inline hidden">
+          <div class="sliders-section">
+            <div class="slider-group">
+              <div class="slider-header">
+                <label class="slider-label">선명도 (Threshold)</label>
+                <span class="slider-value" id="threshold-value">128</span>
+              </div>
+              <input type="range" id="threshold-slider" min="1" max="255" value="128" class="slider" />
+              <div class="slider-marks"><span>어둡게</span><span>밝게</span></div>
+            </div>
+            <div class="slider-group">
+              <div class="slider-header">
+                <label class="slider-label">디테일 (Detail)</label>
+                <span class="slider-value" id="detail-value">50</span>
+              </div>
+              <input type="range" id="detail-slider" min="1" max="100" value="50" class="slider" />
+              <div class="slider-marks"><span>단순</span><span>정밀</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 모든 포맷 공통 실시간 미리보기 -->
+        <div id="options-preview" class="options-preview hidden">
+          <div class="op-header">
+            <i data-lucide="eye" style="width:13px;height:13px;margin-right:5px;"></i>
+            미리보기
+            <span id="op-spinner" class="preview-spinner hidden"></span>
+          </div>
+          <div class="op-panels">
+            <div class="op-panel">
+              <span class="op-panel-label">원본</span>
+              <canvas id="op-original"></canvas>
+            </div>
+            <div class="op-divider">
+              <i data-lucide="arrow-right" style="width:16px;height:16px;color:#B76e79;"></i>
+            </div>
+            <div class="op-panel">
+              <span class="op-panel-label" id="op-converted-label">변환 결과</span>
+              <div id="op-converted-wrap">
+                <canvas id="op-converted"></canvas>
+                <p class="op-hint" id="op-hint">변환 중...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="convert-bar">
+        <button class="btn-convert" id="btn-convert" disabled>
+          <span id="btn-convert-text">포맷을 선택하세요</span>
+          <i data-lucide="arrow-right" style="width:16px;height:16px;margin-left:8px;"></i>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ======================== SCREEN 3: RESULT ======================== -->
+  <div id="screen-result" class="screen">
+    <main class="result-main">
+
+      <!-- 페이지 상단 타이틀 + 버튼 -->
+      <div class="page-top">
+        <div class="logo">
+          <div class="logo-icon">
+            <i data-lucide="pentagon" class="icon-logo"></i>
+          </div>
+          <span class="logo-text">FileConvert<span class="logo-sub">(벡터로)</span></span>
+        </div>
+        <div class="page-top-btns">
+          <button class="btn-ghost" id="btn-back-to-options">
+            <i data-lucide="arrow-left" style="width:15px;height:15px;margin-right:5px;"></i>
+            이전으로
+          </button>
+          <button class="btn-ghost" id="btn-new">
+            <i data-lucide="house" style="width:15px;height:15px;margin-right:5px;"></i>
+            홈화면
+          </button>
+        </div>
+      </div>
+
+      <div class="result-success">
+        <div class="success-icon">
+          <i data-lucide="check-circle-2" class="icon-success"></i>
+        </div>
+        <h2 class="result-title">변환 완료!</h2>
+        <p class="result-sub" id="result-sub">파일이 성공적으로 변환되었습니다.</p>
+      </div>
+
+      <div class="preview-container">
+        <div class="preview-card">
+          <div class="preview-label">원본</div>
+          <div class="preview-frame" id="preview-original">
+            <canvas id="canvas-original"></canvas>
+          </div>
+          <div class="preview-info">
+            <span id="orig-name">—</span>
+            <span class="preview-size" id="orig-size">—</span>
+          </div>
+        </div>
+
+        <div class="preview-arrow">
+          <i data-lucide="arrow-right" style="width:24px;height:24px;color:#B76e79;"></i>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-label converted" id="label-converted">변환됨</div>
+          <div class="preview-frame" id="preview-converted">
+            <canvas id="canvas-converted"></canvas>
+          </div>
+          <div class="preview-info">
+            <span id="conv-name">—</span>
+            <span class="preview-size" id="conv-size">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-download" id="btn-download">
+          <i data-lucide="download" style="width:18px;height:18px;margin-right:8px;"></i>
+          다운로드
+        </button>
+        <button class="btn-convert-another" id="btn-convert-another">
+          <i data-lucide="refresh-cw" style="width:16px;height:16px;margin-right:8px;"></i>
+          다른 파일 변환하기
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <p class="loading-text" id="loading-text">변환 중...</p>
+      <p class="loading-sub">잠시만 기다려주세요</p>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden">
+    <i data-lucide="info" style="width:16px;height:16px;margin-right:8px;flex-shrink:0;"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-line">©Produced by You Seungoh.&nbsp;&nbsp;yso21@naver.com</p>
+    <p class="footer-line"><a href="https://youtube.com/@pianocanvas" target="_blank" class="footer-link">youtube.com/@pianocanvas</a>&nbsp;&nbsp;|&nbsp;&nbsp;Lovely Cafe Music</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
